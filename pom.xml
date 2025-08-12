@@ -40,6 +40,12 @@
       <artifactId>kafka-models</artifactId>
       <version>${kafka-models.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <version>3.5.4</version>
+    </dependency>
   </dependencies>
 
   <build>
