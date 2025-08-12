@@ -6,14 +6,12 @@ import com.google.common.annotations.VisibleForTesting;
 import org.junit.Test;
 
 public class AuthcodeChangedConsumerApplicationTest {
-  // This is a placeholder for the test class.
+    // This is a placeholder test
+    // Please replace with actual tests when functionality is implemented
     @Test
     public void testMain() {
         String[] args = {};
         AuthcodeChangedConsumerApplication.main(args);
-        // Add assertions or verifications as needed
-        assertTrue(true); // Placeholder assertion
+        assertTrue(true);
     }
-
-
 }
