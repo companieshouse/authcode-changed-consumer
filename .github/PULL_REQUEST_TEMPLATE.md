@@ -1,6 +1,6 @@
 ## JIRA Ticket Number / Name
 
-[ABC-123 - Ticket Name](Jira URL)
+[ABC-123: Ticket Name](Jira URL)
 
 ## Short description outlining key changes/additions
 
