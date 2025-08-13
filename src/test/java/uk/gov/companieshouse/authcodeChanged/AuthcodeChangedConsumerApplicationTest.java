@@ -10,7 +10,6 @@ public class AuthcodeChangedConsumerApplicationTest {
     public void testMain() {
         String[] args = {};
         AuthcodeChangedConsumerApplication.main(args);
-        // Add assertions or verifications as needed
-        assertTrue(true); // Placeholder assertion
+        assertTrue(true);
     }
 }
