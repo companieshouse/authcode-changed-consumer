@@ -1,9 +1,9 @@
-package uk.gov.companieshouse.authcodeChanged;
+package uk.gov.companieshouse.authcode.changed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import uk.gov.companieshouse.authcodeChanged.utils.StaticPropertyUtil;
+import uk.gov.companieshouse.authcode.changed.utils.StaticPropertyUtil;
 
 @SpringBootApplication
 public class AuthcodeChangedConsumerApplication {

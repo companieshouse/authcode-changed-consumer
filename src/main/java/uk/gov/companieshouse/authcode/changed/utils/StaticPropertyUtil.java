@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.authcodeChanged.utils;
+package uk.gov.companieshouse.authcode.changed.utils;
 
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;

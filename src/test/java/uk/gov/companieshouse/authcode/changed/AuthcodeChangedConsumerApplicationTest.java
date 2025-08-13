@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.authcodeChanged;
+package uk.gov.companieshouse.authcode.changed;
 
 import static org.junit.jupiter.api.Assertions.*;
 

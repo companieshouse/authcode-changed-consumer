@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.authcodeChanged.utils;
+package uk.gov.companieshouse.authcode.changed.utils;
 
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
