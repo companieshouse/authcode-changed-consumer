@@ -26,16 +26,13 @@
     <private-api-sdk-java.version>4.0.337</private-api-sdk-java.version>
     <api-sdk-manager-java-library.version>3.0.9</api-sdk-manager-java-library.version>
     <api-security-java-version>2.0.8</api-security-java-version>
-    <org.mapstruct.version>1.6.2</org.mapstruct.version>
     <junit-jupiter.version>1.20.3</junit-jupiter.version>
-    <version.kafka-clients>3.1.0</version.kafka-clients>
     <junit.version>4.13.2</junit.version>
     <commons-compress.version>1.27.1</commons-compress.version>
     <commons-lang3.version>3.18.0</commons-lang3.version>
     <google-http-client.version>1.45.0</google-http-client.version>
     <api-helper-java.version>3.0.1</api-helper-java.version>
-    <email-producer-java.version>3.0.4</email-producer-java.version>
-    <flapdoodle.version>4.20.0</flapdoodle.version>
+
     <logback-classic.version>1.5.16</logback-classic.version>
     <tomcat-core-and-websocket.version>11.0.9</tomcat-core-and-websocket.version>
     <grpc.version>1.73.0</grpc.version>
@@ -144,22 +141,13 @@
       <version>${tomcat-core-and-websocket.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-mongodb</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webflux</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-reactive-httpclient</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
-
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -244,11 +232,6 @@
       <version>${api-security-java-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${org.mapstruct.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client</artifactId>
       <version>${google-http-client.version}</version>
@@ -263,48 +246,6 @@
           <artifactId>commons-lang</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>uk.gov.companieshouse</groupId>
-      <artifactId>email-producer-java</artifactId>
-      <version>${email-producer-java.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.kafka</groupId>
-          <artifactId>kafka-clients</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-webapp</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.ee10</groupId>
-      <artifactId>jetty-ee10-webapp</artifactId>
-      <version>12.0.22</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-      <version>${version.kafka-clients}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.xerial.snappy</groupId>
-          <artifactId>snappy-java</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.xerial.snappy</groupId>
-      <artifactId>snappy-java</artifactId>
-      <version>1.1.10.7</version>
-    </dependency>
-    <dependency>
-      <groupId>de.flapdoodle.embed</groupId>
-      <artifactId>de.flapdoodle.embed.mongo.spring3x</artifactId>
-      <version>${flapdoodle.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -369,13 +310,6 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.mapstruct</groupId>
-              <artifactId>mapstruct-processor</artifactId>
-              <version>${org.mapstruct.version}</version>
-            </path>
-          </annotationProcessorPaths>
         </configuration>
       </plugin>
     </plugins>
