@@ -14,13 +14,13 @@ import static org.springframework.http.HttpMethod.GET;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${management.endpoints.web.path-mapping.health}")
+    private String healthcheckUrl;
+
     @Bean
-    public SecurityFilterChain filterChain(
-            @Value("${management.endpoints.web.path-mapping.health}") final String healthcheckUrl,
-            final HttpSecurity http
-    ) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(request -> request
-                .requestMatchers(GET, healthcheckUrl).permitAll()
+                .requestMatchers(GET, this.healthcheckUrl).permitAll()
                 .anyRequest().denyAll()
         ).build();
     }
