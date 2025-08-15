@@ -11,7 +11,7 @@ public class AuthcodeChangedConsumerApplication {
     final StaticPropertyUtil staticPropertyUtil;
 
     @Autowired
-    public AuthcodeChangedConsumerApplication( final StaticPropertyUtil staticPropertyUtil ) {
+    public AuthcodeChangedConsumerApplication(final StaticPropertyUtil staticPropertyUtil) {
         this.staticPropertyUtil = staticPropertyUtil;
     }
 
