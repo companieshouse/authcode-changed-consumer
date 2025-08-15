@@ -262,7 +262,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring-boot.version}</version>
         <configuration>
-          <mainClass>uk.gov.companieshouse.accounts.association.AccountsAssociationServiceApplication
+          <mainClass>uk.gov.companieshouse.authcode.changed.AuthcodeChangedConsumerApplication
           </mainClass>
         </configuration>
         <executions>
