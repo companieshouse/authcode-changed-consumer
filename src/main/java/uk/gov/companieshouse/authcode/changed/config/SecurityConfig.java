@@ -17,6 +17,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                 request -> request.requestMatchers(GET, "/authcode-changed-consumer/healthcheck")
-                        .permitAll().anyRequest().denyAll()).build();
+                        .permitAll()
+                        .anyRequest()
+                        .denyAll())
+                .build();
     }
 }
