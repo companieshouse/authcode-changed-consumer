@@ -4,7 +4,7 @@ locals {
   name_prefix                 = "${local.stack_name}-${var.environment}"
   global_prefix               = "global-${var.environment}"
   service_name                = "authcode-changed-consumer"
-  container_port              = "8081"
+  container_port              = "8082"
   docker_repo                 = "authcode-changed-consumer"
   kms_alias                   = "alias/${var.aws_profile}/environment-services-kms"
   healthcheck_path            = "/authcode-changed-consumer/healthcheck"
