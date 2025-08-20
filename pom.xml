@@ -253,6 +253,11 @@
       <version>6.4.4</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>uk.gov.companieshouse</groupId>
+      <artifactId>kafka-models</artifactId>
+      <version>${kafka-models.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
