@@ -32,6 +32,7 @@
     <commons-lang3.version>3.18.0</commons-lang3.version>
     <google-http-client.version>1.45.0</google-http-client.version>
     <api-helper-java.version>3.0.1</api-helper-java.version>
+    <kafka-models.version>3.0.21</kafka-models.version>
 
     <logback-classic.version>1.5.16</logback-classic.version>
     <tomcat-core-and-websocket.version>11.0.9</tomcat-core-and-websocket.version>
