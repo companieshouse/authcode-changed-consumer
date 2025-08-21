@@ -1,4 +1,7 @@
 #!/bin/bash
 #
-# Start script for company-profile-delta-consumer
-exec java -jar "authcode-changed-consumer.jar"
+# Start script for authcode-changed-consumer
+
+PORT=8082
+
+exec java -jar -Dserver.port="${PORT}" "authcode-changed-consumer.jar"
