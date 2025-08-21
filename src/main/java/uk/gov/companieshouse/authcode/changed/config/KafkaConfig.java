@@ -23,16 +23,13 @@ import uk.gov.companieshouse.authcode.cancellation.AuthCodeCancellation;
 @Configuration
 @EnableKafka
 public class KafkaConfig {
-
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
-
     private final AvroDeserializer<AuthCodeCancellation> authCodeCancellationDeserializer;
     private final Map<String, Object> producerProps;
     private final Map<String, Object> consumerProps;
 
     @Autowired
-    public KafkaConfig(final AvroDeserializer<AuthCodeCancellation> authCodeCancellationDeserializer) {
+    public KafkaConfig(final AvroDeserializer<AuthCodeCancellation> authCodeCancellationDeserializer,
+            @Value("${spring.kafka.bootstrap-servers}") final String bootstrapServers) {
         this.authCodeCancellationDeserializer = authCodeCancellationDeserializer;
 
         this.producerProps = Map.of(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
