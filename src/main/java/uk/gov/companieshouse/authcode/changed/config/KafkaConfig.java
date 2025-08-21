@@ -24,23 +24,26 @@ import uk.gov.companieshouse.authcode.cancellation.AuthCodeCancellation;
 @EnableKafka
 public class KafkaConfig {
 
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
+
     private final AvroDeserializer<AuthCodeCancellation> authCodeCancellationDeserializer;
     private final Map<String, Object> producerProps;
     private final Map<String, Object> consumerProps;
 
     @Autowired
-    public KafkaConfig(AvroDeserializer<AuthCodeCancellation> authCodeCancellationDeserializer,
-            @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers) {
+    public KafkaConfig(final AvroDeserializer<AuthCodeCancellation> authCodeCancellationDeserializer) {
         this.authCodeCancellationDeserializer = authCodeCancellationDeserializer;
 
         this.producerProps = Map.of(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class, ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                AvroSerializer.class);
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, AvroSerializer.class);
 
         this.consumerProps = Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                 ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class,
                 ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, AvroDeserializer.class,
-                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest", ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false",
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest",
+                ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false",
                 ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
     }
 
