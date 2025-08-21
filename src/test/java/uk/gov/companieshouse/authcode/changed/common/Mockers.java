@@ -50,13 +50,17 @@ public class Mockers {
         }
     }
 
-    public void mockGetAssociationDetailsNotFound( final String... companyNumbers ) throws ApiErrorResponseException, URIValidationException {
-        for ( final String companyNumber: companyNumbers ){
-            final var request = Mockito.mock( PrivateAccountsAssociationForCompanyGet.class );
-            Mockito.doReturn( request ).when(accountsAssociationEndpoint).buildGetAssociationsForCompanyRequest( companyNumber, false, 0, 1 );
-            Mockito.lenient().doThrow( new ApiErrorResponseException( new Builder( 404, "Not Found", new HttpHeaders() ) ) ).when( request ).execute();
+    public void mockGetAssociationDetailsNotFound(final String... companyNumbers)
+            throws ApiErrorResponseException, URIValidationException {
+
+        for (final String companyNumber : companyNumbers) {
+            Mockito.doThrow(new ApiErrorResponseException(
+                            new Builder(404, "Not Found", new HttpHeaders())))
+                    .when(accountsAssociationEndpoint)
+                    .buildGetAssociationsForCompanyRequest(companyNumber, false, 0, 1);
         }
     }
+
 
     public void mockAssociationServiceFetchAssociationDetailsNotFound( final String... companyNumbers ){
         for ( final String companyNumber: companyNumbers ){
