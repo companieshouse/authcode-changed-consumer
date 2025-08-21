@@ -39,6 +39,13 @@ public class TestDataManager {
         return createAssociation( "MKUser003", userDetails, companyDetail, StatusEnum.AWAITING_APPROVAL );
     }
 
+    public Association createAssociationFromCompanyNumber(String companyNumber ) {
+        final var userDetails = new User().userId( "MKUser003" ).email( "peach@mushroom.kingdom" );
+        final var companyDetail = new CompanyDetails().companyNumber( companyNumber).companyName( "Mushroom Kingdom" ).companyStatus( "Active" );
+
+        return createAssociation( "MKUser003", userDetails, companyDetail, StatusEnum.AWAITING_APPROVAL );
+    }
+
     public Association createAssociation( final String id, final User user, final CompanyDetails companyDetail, final StatusEnum statusEnum){
 
         final var association = new Association();

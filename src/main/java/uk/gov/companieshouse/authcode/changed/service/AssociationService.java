@@ -41,14 +41,21 @@ public class AssociationService {
     }
 
     public PrivateAccountsAssociationForCompanyGet fetchAssociationDetails( String companyNumber ){
-        LOG.info("ROSEY");
         final var XRequestId =  getXRequestId();
         try {
             LOG.debugContext( XRequestId, String.format( "Sending request to account-association-api: GET /associations/companies/{company_number}. Attempting to fetch Association details for company %s ", companyNumber ), null );
             return accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest( companyNumber, false, 0, 1 );
-        } catch (Exception exception ) {
-            LOG.errorContext(  XRequestId, new Exception( String.format( "Failed to retrieve association details for company number: %s: " , companyNumber ) ), null );
-            throw new InternalServerErrorRuntimeException( "Failed to retrieve user detail ", exception);
+        } catch (ApiErrorResponseException exception) {
+            if (exception.getStatusCode() == 404) {
+                LOG.errorContext(XRequestId, new Exception( String.format( "Association not found for Company Number: %s " , companyNumber ), exception ), null );
+                throw new NotFoundRuntimeException( String.format( "Association not found for Company Number: %s " , companyNumber), exception);
+            } else {
+                LOG.errorContext( XRequestId, new Exception( String.format( "Failed to fetch for Company Number: %s " , companyNumber ), exception ), null);
+                throw new InternalServerErrorRuntimeException( String.format( "Failed to fetch for Company Number: %s" , companyNumber ), exception );
+            }
+        } catch (Exception exception) {
+            LOG.error( XRequestId, new Exception( String.format( "Failed to fetch for Company Number: %s" , companyNumber ) , exception), null );
+            throw new InternalServerErrorRuntimeException( String.format( "Unexpected error while fetching for Company Number: %s" , companyNumber ), exception );
         }
     }
 
