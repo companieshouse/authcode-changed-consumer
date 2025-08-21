@@ -4,7 +4,9 @@ import static uk.gov.companieshouse.authcode.changed.utils.RequestContextUtil.ge
 import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut.StatusEnum;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationForCompanyGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.authcode.changed.exceptions.InternalServerErrorRuntimeException;
 import uk.gov.companieshouse.authcode.changed.exceptions.NotFoundRuntimeException;
 import uk.gov.companieshouse.logging.Logger;
@@ -24,11 +26,11 @@ public class AssociationService {
         this.accountsAssociationEndpoint = accountsAssociationEndpoint;
     }
 
-    public void setCompanyAssociationToUnauthorised(String companyNumber) {
+    public void setCompanyAssociationToUnauthorised(String companyNumber) throws ApiErrorResponseException, URIValidationException {
         LOG.info("Setting association status to UNAUTHORISED for company number: " + companyNumber);
-        AssociationsList associationsList = fetchAssociationDetails(companyNumber);
-        if (associationsList != null && associationsList.getItems() != null) {
-            associationsList.getItems().forEach(association -> {
+        PrivateAccountsAssociationForCompanyGet associationsList = fetchAssociationDetails(companyNumber);
+        if (associationsList != null ) {
+            associationsList.execute().getData().getItems().forEach(association -> {
                 String associationId = association.getId();
                 LOG.info("Updating status for association ID: " + associationId);
                 createUpdateStatusRequest(associationId, StatusEnum.UNAUTHORISED);
@@ -38,23 +40,13 @@ public class AssociationService {
         }
     }
 
-    public AssociationsList fetchAssociationDetails( String companyNumber ){
+    public PrivateAccountsAssociationForCompanyGet fetchAssociationDetails( String companyNumber ){
+        LOG.info("ROSEY");
         final var XRequestId =  getXRequestId();
         try {
             LOG.debugContext( XRequestId, String.format( "Sending request to account-association-api: GET /associations/companies/{company_number}. Attempting to fetch Association details for company %s ", companyNumber ), null );
-            return accountsAssociationEndpoint.createGetAssociationsForCompanyRequest( companyNumber, false, 0, 1 ).getData();
-        } catch ( ApiErrorResponseException exception ) {
-            if( exception.getStatusCode() == 404 ){
-                LOG.errorContext( XRequestId, new Exception( String.format( "Could not find association details for company number: %s " , companyNumber ) ), null );
-                throw new NotFoundRuntimeException( String.format( "Failed to find company number: %s " , companyNumber ), exception );
-            } else {
-                LOG.errorContext( XRequestId, new Exception( String.format( "Failed to fetch associations for company number: %s" , companyNumber ) ), null );
-                throw new InternalServerErrorRuntimeException( String.format( "Failed to fetch associations for company number: %s " , companyNumber ) , exception);
-            }
-        } catch ( URIValidationException exception ) {
-            LOG.errorContext( XRequestId, new Exception( String.format( "Failed to fetch association details for %s, because uri was incorrectly formatted" , companyNumber ) , exception ) ,null );
-            throw new InternalServerErrorRuntimeException( "Invalid uri for account-association-api service ", exception);
-        } catch ( Exception exception ) {
+            return accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest( companyNumber, false, 0, 1 );
+        } catch (Exception exception ) {
             LOG.errorContext(  XRequestId, new Exception( String.format( "Failed to retrieve association details for company number: %s: " , companyNumber ) ), null );
             throw new InternalServerErrorRuntimeException( "Failed to retrieve user detail ", exception);
         }
