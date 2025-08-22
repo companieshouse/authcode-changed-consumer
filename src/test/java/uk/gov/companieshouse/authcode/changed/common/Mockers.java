@@ -23,23 +23,32 @@ public class Mockers {
     private final AccountsAssociationEndpoint accountsAssociationEndpoint;
 
 
-    public Mockers( final AccountsAssociationEndpoint accountsAssociationEndpoint) {
+    public Mockers(final AccountsAssociationEndpoint accountsAssociationEndpoint) {
         this.accountsAssociationEndpoint = accountsAssociationEndpoint;
     }
 
-    public void mockGetAssociationDetails( final AssociationsList associationsList ) throws ApiErrorResponseException, URIValidationException {
-        final var request = Mockito.mock( PrivateAccountsAssociationForCompanyGet.class );
-        Mockito.doReturn( request ).when(accountsAssociationEndpoint).buildGetAssociationsForCompanyRequest(
-                associationsList.getItems().getFirst().getCompanyNumber(), false, 0, 1 );
-        Mockito.lenient().doReturn( new ApiResponse<>( 200, Map.of(), associationsList ) ).when( request ).execute();
+    public void mockGetAssociationDetails(final AssociationsList associationsList)
+            throws ApiErrorResponseException, URIValidationException {
+        final var request = Mockito.mock(PrivateAccountsAssociationForCompanyGet.class);
+        Mockito.doReturn(request)
+                .when(accountsAssociationEndpoint)
+                .buildGetAssociationsForCompanyRequest(
+                        associationsList.getItems()
+                                .getFirst()
+                                .getCompanyNumber(), false, 0, 1);
+        Mockito.lenient()
+                .doReturn(new ApiResponse<>(200, Map.of(), associationsList))
+                .when(request)
+                .execute();
     }
 
-    public void mockGetAssociationDetails( final String... companyNumbers ) throws ApiErrorResponseException, URIValidationException {
-        for ( final String companyNumber: companyNumbers ){
+    public void mockGetAssociationDetails(final String... companyNumbers)
+            throws ApiErrorResponseException, URIValidationException {
+        for (final String companyNumber : companyNumbers) {
             final var associationsList = new AssociationsList();
-                    associationsList.setItems(
+            associationsList.setItems(
                     List.of(testDataManager.createAssociationFromCompanyNumber(companyNumber)));
-            mockGetAssociationDetails( associationsList );
+            mockGetAssociationDetails(associationsList);
         }
     }
 

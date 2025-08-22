@@ -16,8 +16,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
-                request -> request.requestMatchers(GET, "/authcode-changed-consumer/healthcheck").permitAll()
-                        .anyRequest().denyAll())
+                        request -> request.requestMatchers(GET, "/authcode-changed-consumer/healthcheck")
+                                .permitAll()
+                                .anyRequest()
+                                .denyAll())
                 .build();
     }
 }

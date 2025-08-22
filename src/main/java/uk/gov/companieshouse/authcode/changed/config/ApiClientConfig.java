@@ -9,12 +9,11 @@ import uk.gov.companieshouse.api.http.ApiKeyHttpClient;
 @Configuration
 public class ApiClientConfig {
 
-
     @Value("${chs.internal.api.key}")
     private String internalApiKey;
 
     @Bean
-    public InternalApiClient getInternalApiClient(){
+    public InternalApiClient getInternalApiClient() {
         return new InternalApiClient(new ApiKeyHttpClient(internalApiKey));
     }
 }

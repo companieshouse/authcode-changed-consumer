@@ -20,17 +20,21 @@ public class AccountsAssociationEndpoint {
     private final ApiClientUtil apiClientUtil;
 
 
-    public AccountsAssociationEndpoint(ApiClientUtil apiClientUtil) { this.apiClientUtil = apiClientUtil; }
+    public AccountsAssociationEndpoint(ApiClientUtil apiClientUtil) {
+        this.apiClientUtil = apiClientUtil;
+    }
 
 
-    public PrivateAccountsAssociationForCompanyGet buildGetAssociationsForCompanyRequest( String companyNumber, Boolean includeRemoved, int pageIndex, int itemsPerPage) throws ApiErrorResponseException, URIValidationException{
-        final var url = String.format("/associations/companies/%s", companyNumber);
+    public PrivateAccountsAssociationForCompanyGet buildGetAssociationsForCompanyRequest(String companyNumber,
+            Boolean includeRemoved, int pageIndex, int itemsPerPage) throws ApiErrorResponseException, URIValidationException {
+        final var url = String.format( "/associations/companies/%s", companyNumber );
         return apiClientUtil.getInternalApiClient(accountApiUrl)
                 .privateAccountsAssociationResourceHandler()
                 .getAssociationsForCompany(url, includeRemoved, pageIndex, itemsPerPage);
     }
 
-    public PrivateAccountsAssociationUpdateStatusPatch createUpdateStatusRequest(final String associationId, final StatusEnum statusEnum) throws ApiErrorResponseException, URIValidationException {
+    public PrivateAccountsAssociationUpdateStatusPatch createUpdateStatusRequest(final String associationId,
+            final StatusEnum statusEnum) throws ApiErrorResponseException, URIValidationException {
         final var updateStatusUrl = String.format("/associations/%s", associationId);
         return apiClientUtil.getInternalApiClient(accountApiUrl)
                 .privateAccountsAssociationResourceHandler()
