@@ -1,22 +1,17 @@
 package uk.gov.companieshouse.authcode.changed.common;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException.Builder;
 import java.util.List;
 import java.util.Map;
 import org.mockito.Mockito;
 import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
-import uk.gov.companieshouse.api.company.CompanyDetails;
+import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut.StatusEnum;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationForCompanyGet;
+import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationUpdateStatusPatch;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
-import uk.gov.companieshouse.authcode.changed.exceptions.NotFoundRuntimeException;
-
-import uk.gov.companieshouse.api.accounts.user.model.User;
-import uk.gov.companieshouse.api.accounts.user.model.UsersList;
 import uk.gov.companieshouse.authcode.changed.rest.AccountsAssociationEndpoint;
 import uk.gov.companieshouse.authcode.changed.service.AssociationService;
 
@@ -27,11 +22,9 @@ public class Mockers {
 
     private final AccountsAssociationEndpoint accountsAssociationEndpoint;
 
-    private final AssociationService associationService;
 
-    public Mockers( final AccountsAssociationEndpoint accountsAssociationEndpoint, final AssociationService associationService) {
+    public Mockers( final AccountsAssociationEndpoint accountsAssociationEndpoint) {
         this.accountsAssociationEndpoint = accountsAssociationEndpoint;
-        this.associationService = associationService;
     }
 
     public void mockGetAssociationDetails( final AssociationsList associationsList ) throws ApiErrorResponseException, URIValidationException {
@@ -61,11 +54,29 @@ public class Mockers {
         }
     }
 
-
-    public void mockAssociationServiceFetchAssociationDetailsNotFound( final String... companyNumbers ){
-        for ( final String companyNumber: companyNumbers ){
-            Mockito.doThrow( new NotFoundRuntimeException( "authcode-change-consumer", new Exception() ) ).when(
-                    associationService).fetchAssociationDetails( companyNumber );
-        }
+    public void mockUpdateStatusSuccess(final String associationId, final StatusEnum statusEnum)
+            throws ApiErrorResponseException, URIValidationException {
+        final var patchRequest = Mockito.mock(PrivateAccountsAssociationUpdateStatusPatch.class);
+        Mockito.doReturn(patchRequest)
+                .when(accountsAssociationEndpoint)
+                .createUpdateStatusRequest(associationId, statusEnum);
     }
+
+    public void mockUpdateStatusNotFound(final String associationId, final StatusEnum statusEnum)
+            throws ApiErrorResponseException, URIValidationException {
+        Mockito.doThrow(new ApiErrorResponseException(
+                        new Builder(404, "Not Found", new HttpHeaders())))
+                .when(accountsAssociationEndpoint)
+                .createUpdateStatusRequest(associationId, statusEnum);
+    }
+
+    public void mockUpdateStatusApiError(final String associationId, final StatusEnum statusEnum, int statusCode)
+            throws ApiErrorResponseException, URIValidationException {
+        Mockito.doThrow(new ApiErrorResponseException(
+                        new Builder(statusCode, "Error", new HttpHeaders())))
+                .when(accountsAssociationEndpoint)
+                .createUpdateStatusRequest(associationId, statusEnum);
+    }
+
+
 }
