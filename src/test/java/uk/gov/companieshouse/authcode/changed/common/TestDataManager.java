@@ -18,44 +18,13 @@ public class TestDataManager {
         return instance;
     }
 
-    public Association getAssociation1() {
-        final var userDetails = new User().userId("MKUser001")
-                .email("mario@mushroom.kingdom");
-        final var companyDetail = new CompanyDetails().companyNumber("MKCOMP001")
+    public Association createAssociationFromCompanyNumber(String companyNumber, User userDetails) {
+        final var companyDetail = new CompanyDetails()
+                .companyNumber(companyNumber)
                 .companyName("Mushroom Kingdom")
                 .companyStatus("Active");
 
-        return createAssociation("MKUser001", userDetails, companyDetail, StatusEnum.MIGRATED);
-    }
-
-    public Association getAssociation2() {
-        final var userDetails = new User().userId("MKUser002")
-                .email("luigi@mushroom.kingdom");
-        final var companyDetail = new CompanyDetails().companyNumber("MKCOMP001")
-                .companyName("Mushroom Kingdom")
-                .companyStatus("Active");
-
-        return createAssociation("MKUser002", userDetails, companyDetail, StatusEnum.CONFIRMED);
-    }
-
-    public Association getAssociation3() {
-        final var userDetails = new User().userId("MKUser003")
-                .email("peach@mushroom.kingdom");
-        final var companyDetail = new CompanyDetails().companyNumber("MKCOMP001")
-                .companyName("Mushroom Kingdom")
-                .companyStatus("Active");
-
-        return createAssociation("MKUser003", userDetails, companyDetail, StatusEnum.AWAITING_APPROVAL);
-    }
-
-    public Association createAssociationFromCompanyNumber(String companyNumber) {
-        final var userDetails = new User().userId("MKUser003")
-                .email("peach@mushroom.kingdom");
-        final var companyDetail = new CompanyDetails().companyNumber(companyNumber)
-                .companyName("Mushroom Kingdom")
-                .companyStatus("Active");
-
-        return createAssociation("MKUser003", userDetails, companyDetail, StatusEnum.AWAITING_APPROVAL);
+        return createAssociation(userDetails.getUserId(), userDetails, companyDetail, StatusEnum.AWAITING_APPROVAL);
     }
 
     public Association createAssociation(final String id, final User user, final CompanyDetails companyDetail,

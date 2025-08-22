@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mockito.Mockito;
 import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut.StatusEnum;
+import uk.gov.companieshouse.api.accounts.user.model.User;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationForCompanyGet;
 import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationUpdateStatusPatch;
@@ -45,9 +46,13 @@ public class Mockers {
     public void mockGetAssociationDetails(final String... companyNumbers)
             throws ApiErrorResponseException, URIValidationException {
         for (final String companyNumber : companyNumbers) {
+            final var userDetails = new User()
+                    .userId("MKUser003")
+                    .email("peach@mushroom.kingdom");
+
             final var associationsList = new AssociationsList();
             associationsList.setItems(
-                    List.of(testDataManager.createAssociationFromCompanyNumber(companyNumber)));
+                    List.of(testDataManager.createAssociationFromCompanyNumber(companyNumber, userDetails)));
             mockGetAssociationDetails(associationsList);
         }
     }
