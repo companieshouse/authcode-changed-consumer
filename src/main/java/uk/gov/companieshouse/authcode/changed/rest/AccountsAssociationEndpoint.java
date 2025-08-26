@@ -20,15 +20,14 @@ public class AccountsAssociationEndpoint {
         this.apiClientUtil = apiClientUtil;
     }
 
-
-    public final PrivateAccountsAssociationForCompanyGet buildGetAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage){
+    public PrivateAccountsAssociationForCompanyGet buildGetAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage){
         final var url = String.format( "/associations/companies/%s", companyNumber );
         return apiClientUtil.getInternalApiClient(accountApiUrl)
                 .privateAccountsAssociationResourceHandler()
                 .getAssociationsForCompany(url, includeRemoved, pageIndex, itemsPerPage);
     }
 
-    public final PrivateAccountsAssociationUpdateStatusPatch createUpdateStatusRequest(final String associationId, final StatusEnum statusEnum){
+    public PrivateAccountsAssociationUpdateStatusPatch buildUpdateStatusRequest(final String associationId, final StatusEnum statusEnum){
         final var updateStatusUrl = String.format("/associations/%s", associationId);
         return apiClientUtil.getInternalApiClient(accountApiUrl)
                 .privateAccountsAssociationResourceHandler()

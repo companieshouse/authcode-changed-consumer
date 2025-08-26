@@ -20,7 +20,7 @@ public class AssociationService {
         this.accountsAssociationEndpoint = accountsAssociationEndpoint;
     }
 
-    public Supplier<AssociationsList> buildFetchAssociationForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage) throws ApiErrorResponseException, URIValidationException {
+    public Supplier<AssociationsList> buildFetchAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage) throws ApiErrorResponseException, URIValidationException {
         final var request = accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest(companyNumber, includeRemoved, pageIndex, itemsPerPage);
         return () -> {
             try {
@@ -42,8 +42,8 @@ public class AssociationService {
     }
 
 
-    public Supplier<String> createUpdateStatusRequest(final String associationId, final StatusEnum statusEnum) throws ApiErrorResponseException, URIValidationException {
-        final var request = accountsAssociationEndpoint.createUpdateStatusRequest(associationId, statusEnum);
+    public Supplier<String> buildUpdateStatusRequest(final String associationId, final StatusEnum statusEnum) throws ApiErrorResponseException, URIValidationException {
+        final var request = accountsAssociationEndpoint.buildUpdateStatusRequest(associationId, statusEnum);
         return () -> {
             try {
                 LOGGER.debug(String.format("Updating status for association ID %s with status %s", associationId, statusEnum), null);
