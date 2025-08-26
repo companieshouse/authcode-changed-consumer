@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut.StatusEnum;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.authcode.changed.exceptions.InternalServerErrorRuntimeException;
 import uk.gov.companieshouse.authcode.changed.exceptions.NotFoundRuntimeException;
 import static uk.gov.companieshouse.authcode.changed.utils.LoggingUtil.LOGGER;
@@ -20,7 +19,7 @@ public class AssociationService {
         this.accountsAssociationEndpoint = accountsAssociationEndpoint;
     }
 
-    public Supplier<AssociationsList> buildFetchAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage) throws ApiErrorResponseException, URIValidationException {
+    public Supplier<AssociationsList> buildFetchAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage) {
         final var request = accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest(companyNumber, includeRemoved, pageIndex, itemsPerPage);
         return () -> {
             try {
@@ -42,7 +41,7 @@ public class AssociationService {
     }
 
 
-    public Supplier<String> buildUpdateStatusRequest(final String associationId, final StatusEnum statusEnum) throws ApiErrorResponseException, URIValidationException {
+    public Supplier<String> buildUpdateStatusRequest(final String associationId, final StatusEnum statusEnum) {
         final var request = accountsAssociationEndpoint.buildUpdateStatusRequest(associationId, statusEnum);
         return () -> {
             try {
