@@ -27,14 +27,11 @@ public class AssociationService {
                 return request.execute().getData();
             } catch (ApiErrorResponseException exception) {
                 if (exception.getStatusCode() == 404) {
-                    LOGGER.error(new Exception(String.format("Association not found for Company Number: %s ", companyNumber), exception), null);
-                    throw new NotFoundRuntimeException(String.format("Association not found for Company Number: %s ", companyNumber), exception);
+                    throw new NotFoundRuntimeException( String.format( "Association not found for Company Number: %s ",  companyNumber ), exception );
                 } else {
-                    LOGGER.error(new Exception(String.format("Failed to fetch for Company Number: %s ", companyNumber), exception), null);
-                    throw new InternalServerErrorRuntimeException(String.format("Failed to fetch for Company Number: %s", companyNumber), exception);
+                    throw new InternalServerErrorRuntimeException( String.format( "Failed to fetch for Company Number: %s", companyNumber ), exception );
                 }
             } catch (Exception exception) {
-                LOGGER.error(new Exception(String.format("Failed to fetch for Company Number: %s", companyNumber), exception), null);
                 throw new InternalServerErrorRuntimeException(String.format("Unexpected error while fetching for Company Number: %s", companyNumber), exception);
             }
         };

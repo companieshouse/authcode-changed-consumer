@@ -43,21 +43,21 @@ public class AssociationServiceTest {
     private static final TestDataManager testDataManager = TestDataManager.getInstance();
 
     @Test
-    void buildFetchAssociationsForCompanyRequestWithNullInputReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
+    void fetchAssociationsForCompanyRequestWithNullInputReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
         Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( null, false, 0, 1 );
         Mockito.doThrow( NullPointerException.class ).when( privateAccountsAssociationForCompanyGet ).execute();
         Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest( null, false, 0, 1 ).get());
     }
 
     @Test
-    void fetchUserDetailsWithMalformedInputReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
+    void fetchAssociationDetailsWithMalformedInputReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
         Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "$$$", false, 0, 1 );
         Mockito.doThrow( new URIValidationException( "Uri incorrectly formatted" ) ).when( privateAccountsAssociationForCompanyGet ).execute();
         Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest( "$$$", false, 0, 1 ).get());
     }
 
     @Test
-    void fetchUserDetailsThrowsNotFoundForNonexistentUser() throws ApiErrorResponseException, URIValidationException {
+    void fetchAssociationDetailsWithNonexistentAssociationReturnsNotFound() throws ApiErrorResponseException, URIValidationException {
         ApiErrorResponseException apiException = new ApiErrorResponseException( new ApiErrorResponseException.Builder( 404, "Not Found", new HttpHeaders() ) );
         when( accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest("111", false, 0, 1) ).thenReturn(privateAccountsAssociationForCompanyGet);
         when( privateAccountsAssociationForCompanyGet.execute() ).thenThrow( apiException );
@@ -65,7 +65,7 @@ public class AssociationServiceTest {
     }
 
     @Test
-    void fetchUserDetailsThrowsInternalServerErrorOnApiErrorWithNonNotFoundStatus() throws ApiErrorResponseException, URIValidationException {
+    void fetchAssociationDetailsWithStatusNotFoundReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
         Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "MKUser001", false, 0, 1 );
         Mockito.doThrow( new ApiErrorResponseException( new Builder( 500, "Something unexpected happened", new HttpHeaders() ) ) ).when( privateAccountsAssociationForCompanyGet ).execute();
         Supplier<AssociationsList> supplier = associationService.buildFetchAssociationsForCompanyRequest( "MKUser001", false, 0, 1 );
@@ -73,7 +73,7 @@ public class AssociationServiceTest {
     }
 
     @Test
-    void fetchUserDetailsSuccessfullyFetchesUserData() throws ApiErrorResponseException, URIValidationException {
+    void fetchAssociationDetailsReturnsSuccessfully() throws ApiErrorResponseException, URIValidationException {
         Association association = testDataManager.fetchAssociation("MiAssociation001").getFirst();
         AssociationsList associationsList = new AssociationsList();
         associationsList.setItems(List.of(association));
