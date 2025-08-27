@@ -1,9 +1,12 @@
 package uk.gov.companieshouse.authcode.changed.rest;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
 import com.google.api.client.http.HttpHeaders;
+
 import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpResponseException.Builder;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -54,24 +57,24 @@ public class AccountsAssociationEndpointTest {
     }
 
     @Test
-    void getAssociationsForCompanyWithMalformedInputReturnsBadRequest() {
-        Assertions.assertThrows(NullPointerException.class, () -> accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest("$$$$", false, 1, 0).execute() );
+    void getAssociationsForCompanyWithMalformedInputReturnsURIValidationException() throws ApiErrorResponseException, URIValidationException {
+        Mockito.doReturn( internalApiClient ).when( apiClientUtil ).getInternalApiClient( any() );
+        Mockito.doReturn( privateAccountsAssociationResourceHandler ).when( internalApiClient ).privateAccountsAssociationResourceHandler();
+        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( privateAccountsAssociationResourceHandler ).getAssociationsForCompany( any(), any(), any(), any() );
+
+        Mockito.doThrow( new URIValidationException( "Malformed URI" ) ).when( privateAccountsAssociationForCompanyGet ).execute();
+
+        Assertions.assertThrows( URIValidationException.class, () -> accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest( "$$$$", false, 1, 0 ).execute() );
     }
 
     @Test
     void getAssociationsForCompanyWithNonexistentCompanyReturnsNotFound() throws ApiErrorResponseException, URIValidationException {
-        Mockito.doReturn(internalApiClient).when(apiClientUtil).getInternalApiClient(Mockito.any());
-        Mockito.doReturn(privateAccountsAssociationResourceHandler).when(internalApiClient).privateAccountsAssociationResourceHandler();
-        Mockito.doReturn(privateAccountsAssociationForCompanyGet).when(privateAccountsAssociationResourceHandler).getAssociationsForCompany(any(), any(), any(), any() );
+        Mockito.doReturn( internalApiClient ).when( apiClientUtil ).getInternalApiClient( any() );
+        Mockito.doReturn( privateAccountsAssociationResourceHandler ).when( internalApiClient ).privateAccountsAssociationResourceHandler();
+        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( privateAccountsAssociationResourceHandler ).getAssociationsForCompany( any(), any(), any(), any() );
 
-        final var AssociationsList = new AssociationsList().items(List.of());
-        final var intendedResponse = new ApiResponse<>(404, Map.of(), AssociationsList);
-
-        Mockito.doReturn(intendedResponse).when(privateAccountsAssociationForCompanyGet).execute();
-        final var response = accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest("MKCOMP001", false, 0, 3).execute();
-
-        Assertions.assertEquals(404, response.getStatusCode());
-        Assertions.assertTrue(response.getData().getItems().isEmpty(), "Expected no associations for non-existent company");
+        Mockito.doThrow( new ApiErrorResponseException( new HttpResponseException.Builder( 404, "Not Found", new HttpHeaders() ) ) ).when( privateAccountsAssociationForCompanyGet ).execute();
+        Assertions.assertThrows( ApiErrorResponseException.class, () -> accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest( "MKCOMP001", false, 0, 3 ).execute() );
     }
 
     @Test
@@ -96,7 +99,7 @@ public class AccountsAssociationEndpointTest {
         Mockito.doReturn(privateAccountsAssociationResourceHandler).when(internalApiClient).privateAccountsAssociationResourceHandler();
         Mockito.doReturn(privateAccountsAssociationUpdateStatusPatch).when(privateAccountsAssociationResourceHandler).updateAssociationStatusForId(Mockito.any(), Mockito.any());
 
-        final var notFound = new ApiErrorResponseException(new HttpResponseException.Builder(404, "Not Found", new HttpHeaders()));
+        final var notFound = new ApiErrorResponseException(new ApiErrorResponseException.Builder(404, "Not Found", new HttpHeaders()));
         Mockito.doThrow(notFound).when(privateAccountsAssociationUpdateStatusPatch).execute();
         final var request = accountsAssociationEndpoint.buildUpdateStatusRequest("12345678", StatusEnum.UNAUTHORISED);
 
@@ -110,8 +113,14 @@ public class AccountsAssociationEndpointTest {
     }
 
     @Test
-    void buildUpdateStatusRequestWithMalformedInputReturnsBadRequest() {
-        Assertions.assertThrows(NullPointerException.class, () -> accountsAssociationEndpoint.buildUpdateStatusRequest("$$$$", null).execute());
+    void buildUpdateStatusRequestWithMalformedInputReturnsBadRequest() throws ApiErrorResponseException, URIValidationException {
+        Mockito.doReturn( internalApiClient ).when( apiClientUtil ).getInternalApiClient( Mockito.any() );
+        Mockito.doReturn( privateAccountsAssociationResourceHandler ).when( internalApiClient ).privateAccountsAssociationResourceHandler();
+        Mockito.doReturn( privateAccountsAssociationUpdateStatusPatch ).when( privateAccountsAssociationResourceHandler ).updateAssociationStatusForId( any(), any() );
+
+        Mockito.doThrow( new URIValidationException( "Malformed URI" ) ).when( privateAccountsAssociationUpdateStatusPatch ).execute();
+
+        Assertions.assertThrows(URIValidationException.class, () -> accountsAssociationEndpoint.buildUpdateStatusRequest("$$$$", null).execute());
     }
 
     @Test

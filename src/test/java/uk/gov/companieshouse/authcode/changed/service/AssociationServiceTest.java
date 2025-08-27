@@ -65,7 +65,7 @@ public class AssociationServiceTest {
     }
 
     @Test
-    void fetchAssociationDetailsWithStatusNotFoundReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
+    void fetchAssociationDetailsWithUnexpectedErrorReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
         Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "MKUser001", false, 0, 1 );
         Mockito.doThrow( new ApiErrorResponseException( new Builder( 500, "Something unexpected happened", new HttpHeaders() ) ) ).when( privateAccountsAssociationForCompanyGet ).execute();
         Supplier<AssociationsList> supplier = associationService.buildFetchAssociationsForCompanyRequest( "MKUser001", false, 0, 1 );
