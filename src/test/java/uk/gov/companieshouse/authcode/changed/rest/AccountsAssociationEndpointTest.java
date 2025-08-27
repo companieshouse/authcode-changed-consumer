@@ -1,12 +1,9 @@
 package uk.gov.companieshouse.authcode.changed.rest;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 
 import com.google.api.client.http.HttpHeaders;
-
 import com.google.api.client.http.HttpResponseException;
-import com.google.api.client.http.HttpResponseException.Builder;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
