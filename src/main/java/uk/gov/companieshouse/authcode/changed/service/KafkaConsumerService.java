@@ -20,8 +20,6 @@ import reactor.core.publisher.Mono;
 import uk.gov.companieshouse.api.accounts.associations.model.Association;
 import uk.gov.companieshouse.api.accounts.associations.model.Association.StatusEnum;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.authcode.cancellation.AuthCodeCancellation;
 
 @Service
@@ -60,7 +58,7 @@ public class KafkaConsumerService {
 
     public void consumeAuthCodeCancellationMessage( final ConsumerRecord<String, AuthCodeCancellation> consumerRecord, final @Header( name = RetryTopicHeaders.DEFAULT_HEADER_ATTEMPTS, required = false ) Integer attemptNumber, final Acknowledgment acknowledgment ){
         final var companyNumber = consumerRecord.value().getCompanyNumber();
-        final var xRequestId = String.format( "%s-%d", companyNumber, attemptNumber );
+        final var xRequestId = String.format( "company_number: %s - Attempt:%d", companyNumber, attemptNumber );
         LOGGER.debugContext( xRequestId, "Received message", null );
         int pageIndex = 0;
         int totalPages;
@@ -78,14 +76,14 @@ public class KafkaConsumerService {
             final var updatedAssociationIds = Flux.fromIterable( unsentRequests )
                     .flatMap( request -> Mono.just( request )
                             .map( Supplier::get ) )
-                    .reduce( ( id1, id2 ) -> id1 + ", id2" )
+                    .reduce( ( id1, id2 ) -> id1 + ", " + id2 )
                     .block();
-            LOGGER.infoContext(xRequestId, String.format( "Updated association IDs %s", updatedAssociationIds ), null );
+            LOGGER.infoContext( xRequestId, String.format( "Updated association IDs %s", updatedAssociationIds ), null );
 
             acknowledgment.acknowledge();
 
             pageIndex++;
             totalPages = page.getTotalPages();
-        } while (pageIndex < totalPages);
+        } while ( pageIndex < totalPages );
     }
 }

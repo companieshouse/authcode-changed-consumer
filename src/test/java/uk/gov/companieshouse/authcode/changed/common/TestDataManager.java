@@ -14,8 +14,10 @@ import java.util.stream.Collectors;
 import uk.gov.companieshouse.api.accounts.associations.model.Association;
 import uk.gov.companieshouse.api.accounts.associations.model.Association.ApprovalRouteEnum;
 import uk.gov.companieshouse.api.accounts.associations.model.Association.StatusEnum;
+import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
 import uk.gov.companieshouse.api.accounts.user.model.User;
 import uk.gov.companieshouse.api.company.CompanyDetails;
+import uk.gov.companieshouse.api.model.ApiResponse;
 
 public class TestDataManager {
 
@@ -401,6 +403,17 @@ public class TestDataManager {
                 .map( associationSuppliers::get )
                 .map( Supplier::get )
                 .collect( Collectors.toList() );
+    }
+
+    public AssociationsList fetchAssociations(final String... ids ) {
+        List<Association> associations = fetchAssociation(ids);
+        AssociationsList associationsList = new AssociationsList();
+        associationsList.items(associations);
+        associationsList.itemsPerPage(1);
+        associationsList.setTotalPages(ids.length);
+        associationsList.setTotalResults(ids.length);
+        associationsList.pageNumber(0);
+        return associationsList;
     }
 
     public List<User> fetchUser( final String... ids  ){
