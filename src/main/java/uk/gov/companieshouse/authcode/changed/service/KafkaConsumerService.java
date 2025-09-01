@@ -21,14 +21,15 @@ import uk.gov.companieshouse.api.accounts.associations.model.Association;
 import uk.gov.companieshouse.api.accounts.associations.model.Association.StatusEnum;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut;
 import uk.gov.companieshouse.authcode.cancellation.AuthCodeCancellation;
+import uk.gov.companieshouse.authcode.changed.utils.StaticPropertyUtil;
 
 @Service
 public class KafkaConsumerService {
 
-    private static final double value = 2.0;
-    private final AssociationService associationService;
-
+    private static final double KAFKA_BACKOFF_MULTIPLIER = 2.0;
     private static final Set<StatusEnum> updateableStatuses = Set.of( StatusEnum.CONFIRMED, StatusEnum.AWAITING_APPROVAL, StatusEnum.MIGRATED );
+
+    private final AssociationService associationService;
 
     public KafkaConsumerService(AssociationService associationService) {
         this.associationService = associationService;
@@ -37,16 +38,14 @@ public class KafkaConsumerService {
 
     @RetryableTopic(
             autoCreateTopics = "false",
-
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             attempts = "${kafka.max-attempts}",
             backoff = @Backoff(
                     delayExpression = "${kafka.initial-backoff-delay}",
-                    multiplier = value
+                    multiplier = KAFKA_BACKOFF_MULTIPLIER
             ),
             exclude = NonRetryableErrorException.class,
             kafkaTemplate = "kafkaAuthCodeCancellationTemplate",
-
             dltTopicSuffix = "-error",
             dltStrategy = DltStrategy.ALWAYS_RETRY_ON_ERROR
     )
@@ -55,16 +54,18 @@ public class KafkaConsumerService {
             groupId = "${kafka.group-id.authcode.cancellation}",
             containerFactory = "listenerContainerFactoryAuthCodeCancellation"
     )
-
-    public void consumeAuthCodeCancellationMessage( final ConsumerRecord<String, AuthCodeCancellation> consumerRecord, final @Header( name = RetryTopicHeaders.DEFAULT_HEADER_ATTEMPTS, required = false ) Integer attemptNumber, final Acknowledgment acknowledgment ){
+    public void consumeAuthCodeCancellationMessage( final ConsumerRecord<String, AuthCodeCancellation> consumerRecord,
+            final @Header( name = RetryTopicHeaders.DEFAULT_HEADER_ATTEMPTS, required = false ) Integer attemptNumber,
+            final Acknowledgment acknowledgment ){
         final var companyNumber = consumerRecord.value().getCompanyNumber();
         final var xRequestId = String.format( "company_number: %s - Attempt:%d", companyNumber, attemptNumber );
         LOGGER.debugContext( xRequestId, "Received message", null );
         int pageIndex = 0;
         int totalPages;
+        int itemsPerPage = StaticPropertyUtil.KAFKA_ASSOCIATION_ITEMS_PER_PAGE > 0 ? StaticPropertyUtil.KAFKA_ASSOCIATION_ITEMS_PER_PAGE : 15;
 
         do {
-            final var page = associationService.buildFetchAssociationsForCompanyRequest( companyNumber, false, pageIndex, 15 ).get();
+            final var page = associationService.buildFetchAssociationsForCompanyRequest( companyNumber, false, pageIndex, itemsPerPage).get();
 
             final var unsentRequests = page.getItems()
                     .stream()
