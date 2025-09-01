@@ -64,8 +64,8 @@ class KafkaConsumerServiceTest {
     void consumerAuthCodeCancellationMessageSuccessfullyUpdatesStatusWith4Pages1ItemPerPage() {
         AssociationsList page1 = testDataManager.fetchAssociations(1, 0, 2, "MiAssociation001");
         AssociationsList page2 = testDataManager.fetchAssociations(1, 1, 2, "MiAssociation002");
-        AssociationsList page3 = testDataManager.fetchAssociations(1, 0, 2, "MiAssociation044");
-        AssociationsList page4 = testDataManager.fetchAssociations(1, 1, 2, "MiAssociation045");
+        AssociationsList page3 = testDataManager.fetchAssociations(1, 0, 2, "MiAssociation039");
+        AssociationsList page4 = testDataManager.fetchAssociations(1, 1, 2, "MiAssociation040");
         Supplier<AssociationsList> fetchSupplier1 = () -> page1;
         Supplier<AssociationsList> fetchSupplier2 = () -> page2;
         Supplier<AssociationsList> fetchSupplier3 = () -> page3;
@@ -81,8 +81,8 @@ class KafkaConsumerServiceTest {
         Mockito.doReturn( fetchSupplier4 ).when( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP002"), eq(false), eq(1), anyInt());
         Mockito.doReturn( UpdateSupplier1 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
         Mockito.doReturn( UpdateSupplier2 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation044", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation045", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation039", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation040", StatusEnum.UNAUTHORISED );
 
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord1, 1, acknowledgment );
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord2, 1, acknowledgment );
@@ -99,8 +99,8 @@ class KafkaConsumerServiceTest {
 
     @Test
     void consumerAuthCodeCancellationMessageSuccessfullyUpdatesStatusWith2Pages3ItemsPerPage() {
-        AssociationsList page1 = testDataManager.fetchAssociations(3, 0, 2, "MiAssociation001", "MiAssociation002", "MiAssociation003");
-        AssociationsList page2 = testDataManager.fetchAssociations(3, 1, 2, "MiAssociation004", "MiAssociation005", "MiAssociation006");
+        AssociationsList page1 = testDataManager.fetchAssociations(3, 0, 2, "MiAssociation001", "MiAssociation002", "MiAssociation012");
+        AssociationsList page2 = testDataManager.fetchAssociations(3, 1, 2, "MiAssociation014", "MiAssociation015", "MiAssociation016");
         Supplier<AssociationsList> fetchSupplier1 = () -> page1;
         Supplier<AssociationsList> fetchSupplier2 = () -> page2;
         Supplier<String> UpdateSupplier1 = () -> "MiAssociation001";
@@ -115,10 +115,10 @@ class KafkaConsumerServiceTest {
 
         Mockito.doReturn( UpdateSupplier1 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
         Mockito.doReturn( UpdateSupplier2 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation003", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation004", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier5 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation005", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier6 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation006", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation012", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation014", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier5 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation015", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier6 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation016", StatusEnum.UNAUTHORISED );
 
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord1, 1, acknowledgment );
 
@@ -127,10 +127,10 @@ class KafkaConsumerServiceTest {
 
         Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
         Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation003", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation004", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation005", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation006", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation012", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation014", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation015", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation016", StatusEnum.UNAUTHORISED );
 
         Mockito.verify(acknowledgment, times(2) ).acknowledge();
     }

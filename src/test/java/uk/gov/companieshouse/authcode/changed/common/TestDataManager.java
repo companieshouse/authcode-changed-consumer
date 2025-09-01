@@ -25,7 +25,6 @@ public class TestDataManager {
     private final Map<String, Supplier<Association>> associationSuppliers = new HashMap<>();
     private final Map<String, Supplier<User>> userSuppliers = new HashMap<>();
     private final Map<String, Supplier<CompanyDetails>> companyDetailsSuppliers = new HashMap<>();
-    private final Map<String, Supplier<String>> updateSuppliers = new HashMap<>();
 
     public static TestDataManager getInstance() {
         if (Objects.isNull(instance)) {
@@ -52,46 +51,6 @@ public class TestDataManager {
                 .approvalRoute( ApprovalRouteEnum.AUTH_CODE )
                 .etag( generateEtag() );
         associationSuppliers.put( "MiAssociation002", MiAssociation002 );
-
-        final Supplier<Association> MiAssociation003 = () -> new Association()
-                .id( "MiAssociation003" )
-                .companyNumber( "MICOMP001" )
-                .userId( "MiUser003" )
-                .status( StatusEnum.CONFIRMED )
-                .approvalRoute( ApprovalRouteEnum.AUTH_CODE )
-                .etag( generateEtag() );
-
-        associationSuppliers.put( "MiAssociation003", MiAssociation003 );
-
-        final Supplier<Association> MiAssociation004 = () -> new Association()
-                .id( "MiAssociation004" )
-                .companyNumber( "MICOMP001" )
-                .userId( "MiUser003" )
-                .status( StatusEnum.CONFIRMED )
-                .approvalRoute( ApprovalRouteEnum.AUTH_CODE )
-                .etag( generateEtag() );
-
-        associationSuppliers.put( "MiAssociation004", MiAssociation004 );
-
-        final Supplier<Association> MiAssociation005 = () -> new Association()
-                .id( "MiAssociation005" )
-                .companyNumber( "MICOMP001" )
-                .userId( "MiUser003" )
-                .status( StatusEnum.CONFIRMED )
-                .approvalRoute( ApprovalRouteEnum.AUTH_CODE )
-                .etag( generateEtag() );
-
-        associationSuppliers.put( "MiAssociation005", MiAssociation005 );
-
-        final Supplier<Association> MiAssociation006 = () -> new Association()
-                .id( "MiAssociation006" )
-                .companyNumber( "MICOMP001" )
-                .userId( "MiUser003" )
-                .status( StatusEnum.CONFIRMED )
-                .approvalRoute( ApprovalRouteEnum.AUTH_CODE )
-                .etag( generateEtag() );
-
-        associationSuppliers.put( "MiAssociation006", MiAssociation006 );
 
         final Supplier<Association> MiAssociation012 = () -> new Association()
                 .id( "MiAssociation012" )
@@ -393,39 +352,7 @@ public class TestDataManager {
                 .etag( generateEtag() );
 
         associationSuppliers.put( "MiAssociation043", MiAssociation043 );
-
-        final Supplier<Association> MiAssociation044 = () -> new Association()
-                .id( "MiAssociation044" )
-                .companyNumber( "MICOMP002" )
-                .userId( "MiUser029" )
-                .status( StatusEnum.AWAITING_APPROVAL )
-                .approvalRoute( ApprovalRouteEnum.INVITATION )
-                .approvalExpiryAt( String.valueOf( LocalDateTime.parse( "2500-05-08T10:30:00.000000" ) ) )
-                .etag( generateEtag() );
-
-        associationSuppliers.put( "MiAssociation044", MiAssociation044 );
-
-        final Supplier<Association> MiAssociation045 = () -> new Association()
-                .id( "MiAssociation045" )
-                .companyNumber( "MICOMP002" )
-                .userId( "MiUser029" )
-                .status( StatusEnum.AWAITING_APPROVAL )
-                .approvalRoute( ApprovalRouteEnum.INVITATION )
-                .approvalExpiryAt( String.valueOf( LocalDateTime.parse( "2500-05-08T10:30:00.000000" ) ) )
-                .etag( generateEtag() );
-
-        associationSuppliers.put( "MiAssociation045", MiAssociation045 );
     }
-
-    private void instantiateUpdateStrings() {
-        Supplier<String> MiAssociation001 = () -> new String("MiAssociation043");
-        Supplier<String> MiAssociation002 = () -> new String("MiAssociation044");
-        Supplier<String> MiAssociation003 = () -> new String("MiAssociation045");
-
-        updateSuppliers.put("MiAssociation001", MiAssociation001);
-
-    }
-
 
     private void instantiateUserDtoSuppliers(){
         userSuppliers.put( "MiUser001", () -> new User().userId( "MiUser001" ).email( "guybrush.threepwood.monkey.island@inugami-example.com" ).displayName( "Guybrush Threepwood" ) );
@@ -467,14 +394,6 @@ public class TestDataManager {
         instantiateAssociationSuppliers();
         instantiateUserDtoSuppliers();
         instantiateCompanyDtoSuppliers();
-        instantiateUpdateStrings();
-    }
-
-    public List<String> fetchUpdateStrings (final String... ids ) {
-        return Arrays.stream(ids)
-                .map(updateSuppliers::get)
-                .map(Supplier::get)
-                .collect(Collectors.toList());
     }
 
     public List<Association> fetchAssociation( final String... ids  ){

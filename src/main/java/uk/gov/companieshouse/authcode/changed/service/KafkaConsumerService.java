@@ -3,6 +3,7 @@ package uk.gov.companieshouse.authcode.changed.service;
 import static uk.gov.companieshouse.authcode.changed.utils.LoggingUtil.LOGGER;
 
 import consumer.exception.NonRetryableErrorException;
+import java.time.Duration;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -31,7 +32,7 @@ public class KafkaConsumerService {
 
     private final AssociationService associationService;
 
-    public KafkaConsumerService(AssociationService associationService) {
+    public KafkaConsumerService(final AssociationService associationService) {
         this.associationService = associationService;
     }
 
@@ -78,7 +79,7 @@ public class KafkaConsumerService {
                     .flatMap( request -> Mono.just( request )
                             .map( Supplier::get ) )
                     .reduce( ( id1, id2 ) -> id1 + ", " + id2 )
-                    .block();
+                    .block(Duration.ofSeconds(20));
             LOGGER.infoContext( xRequestId, String.format( "Updated association IDs %s", updatedAssociationIds ), null );
 
             acknowledgment.acknowledge();
