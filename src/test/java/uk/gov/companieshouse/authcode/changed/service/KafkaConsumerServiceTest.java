@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.authcode.changed.service;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -13,23 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.support.Acknowledgment;
-import org.springframework.mock.env.MockEnvironment;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut.StatusEnum;
 import uk.gov.companieshouse.authcode.cancellation.AuthCodeCancellation;
 import uk.gov.companieshouse.authcode.changed.common.TestDataManager;
-import uk.gov.companieshouse.authcode.changed.config.ApiClientConfig;
-import uk.gov.companieshouse.authcode.changed.config.AvroConfig;
-import uk.gov.companieshouse.authcode.changed.utils.StaticPropertyUtil;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("unit-test")
@@ -145,9 +134,4 @@ class KafkaConsumerServiceTest {
 
         Mockito.verify(acknowledgment, times(2) ).acknowledge();
     }
-
-    // no associations found to update
-    // exception thrown when fetching associations
-
-
 }
