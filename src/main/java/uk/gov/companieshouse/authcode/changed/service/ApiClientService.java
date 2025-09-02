@@ -1,22 +1,15 @@
 package uk.gov.companieshouse.authcode.changed.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.InternalApiClient;
-import uk.gov.companieshouse.sdk.manager.ApiClientManager;
 import uk.gov.companieshouse.sdk.manager.ApiSdkManager;
 
 @Service
 public class ApiClientService {
 
-    public ApiClient getApiClient() {
-        return ApiClientManager.getSDK();
-    }
-
-    public InternalApiClient getInternalApiClient( String accountApiUrl) {
+    public InternalApiClient getInternalApiClient( String baseUrl) {
         final var internalApiClient = ApiSdkManager.getInternalSDK();
-        internalApiClient.setInternalBasePath( accountApiUrl );
+        internalApiClient.setInternalBasePath( baseUrl );
         return internalApiClient;
     }
 }
