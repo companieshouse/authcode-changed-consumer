@@ -148,6 +148,10 @@
           <groupId>commons-collections</groupId>
           <artifactId>commons-collections</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>com.nimbusds</groupId>
+          <artifactId>nimbus-jose-jwt</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
