@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import uk.gov.companieshouse.api.accounts.associations.model.Association;
 import uk.gov.companieshouse.api.accounts.associations.model.Association.ApprovalRouteEnum;
 import uk.gov.companieshouse.api.accounts.associations.model.Association.StatusEnum;
+import uk.gov.companieshouse.api.accounts.associations.model.AssociationsList;
 import uk.gov.companieshouse.api.accounts.user.model.User;
 import uk.gov.companieshouse.api.company.CompanyDetails;
 
@@ -353,7 +354,6 @@ public class TestDataManager {
         associationSuppliers.put( "MiAssociation043", MiAssociation043 );
     }
 
-
     private void instantiateUserDtoSuppliers(){
         userSuppliers.put( "MiUser001", () -> new User().userId( "MiUser001" ).email( "guybrush.threepwood.monkey.island@inugami-example.com" ).displayName( "Guybrush Threepwood" ) );
         userSuppliers.put( "MiUser002", () -> new User().userId( "MiUser002" ).email( "lechuck.monkey.island@inugami-example.com" ).displayName( "LeChuck" ) );
@@ -401,6 +401,17 @@ public class TestDataManager {
                 .map( associationSuppliers::get )
                 .map( Supplier::get )
                 .collect( Collectors.toList() );
+    }
+
+    public AssociationsList fetchAssociations(int itemsPerPage, int pageNum, int totalPages, final String... ids ) {
+        AssociationsList associationsList = new AssociationsList();
+        List<Association> associations = fetchAssociation(ids);
+        associationsList.items(associations);
+        associationsList.itemsPerPage(itemsPerPage);
+        associationsList.setTotalPages(totalPages);
+        associationsList.pageNumber(pageNum);
+        associationsList.setTotalResults(ids.length);
+        return associationsList;
     }
 
     public List<User> fetchUser( final String... ids  ){
