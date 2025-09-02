@@ -27,12 +27,12 @@ public class AssociationService {
                 return request.execute().getData();
             } catch (ApiErrorResponseException exception) {
                 if (exception.getStatusCode() == 404) {
-                    throw new NotFoundRuntimeException( String.format( "Association not found for Company Number: %s ", companyNumber ), exception );
+                    throw new NotFoundRuntimeException( String.format( "Association not found for Company Number: %s ", companyNumber ), new Exception( String.format( "Association not found for Company Number: %s ", companyNumber ) ) );
                 } else {
-                    throw new InternalServerErrorRuntimeException( String.format( "Failed to fetch for Company Number: %s ", companyNumber ), exception );
+                    throw new InternalServerErrorRuntimeException( String.format( "Failed to fetch for Company Number: %s ", companyNumber ), new Exception( String.format( "Failed to fetch for Company Number: %s ", companyNumber ) ) );
                 }
             } catch (Exception exception) {
-                throw new InternalServerErrorRuntimeException( String.format( "Unexpected error while fetching for Company Number: %s", companyNumber ), exception );
+                throw new InternalServerErrorRuntimeException( String.format( "Unexpected error while fetching for Company Number: %s", companyNumber ), new Exception( String.format( "Unexpected error while fetching for Company Number: %s", companyNumber ) ) );
             }
         };
     }
@@ -47,12 +47,12 @@ public class AssociationService {
                 return associationId;
             } catch (ApiErrorResponseException exception) {
                 if (exception.getStatusCode() == 404) {
-                    throw new NotFoundRuntimeException( String.format( "Association not found for ID: %s ", associationId ), exception );
+                    throw new NotFoundRuntimeException( String.format( "Association not found for ID: %s ", associationId ), new Exception( String.format( "Association not found for ID: %s ", associationId ) ) );
                 } else {
-                    throw new InternalServerErrorRuntimeException( String.format( "Failed to update status for association ID: %s", associationId ), exception );
+                    throw new InternalServerErrorRuntimeException( String.format( "Failed to update status for association ID: %s", associationId ), new Exception( String.format( "Failed to update status for association ID: %s ", associationId ) ) );
                 }
             } catch (Exception exception) {
-                throw new InternalServerErrorRuntimeException( String.format( "Unexpected error while updating status for association ID: %s", associationId ), exception );
+                throw new InternalServerErrorRuntimeException( String.format( "Unexpected error while updating status for association ID: %s", associationId ), new Exception( String.format( "Unexpected error while updating status for association ID: %s ", associationId ) ) );
             }
         };
     }
