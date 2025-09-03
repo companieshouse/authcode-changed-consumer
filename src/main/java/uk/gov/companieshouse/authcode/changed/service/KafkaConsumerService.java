@@ -26,8 +26,7 @@ import uk.gov.companieshouse.authcode.changed.utils.StaticPropertyUtil;
 
 @Service
 public class KafkaConsumerService {
-
-    private static final double KAFKA_BACKOFF_MULTIPLIER = 2.0;
+    
     private static final Set<StatusEnum> updateableStatuses = Set.of( StatusEnum.CONFIRMED, StatusEnum.AWAITING_APPROVAL, StatusEnum.MIGRATED );
 
     private final AssociationService associationService;
