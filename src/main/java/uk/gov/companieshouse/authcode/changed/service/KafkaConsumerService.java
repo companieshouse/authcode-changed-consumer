@@ -41,10 +41,7 @@ public class KafkaConsumerService {
             autoCreateTopics = "false",
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             attempts = "${kafka.max-attempts}",
-            backoff = @Backoff(
-                    delayExpression = "${kafka.initial-backoff-delay}",
-                    multiplier = KAFKA_BACKOFF_MULTIPLIER
-            ),
+            backoff = @Backoff(delayExpression = "${kafka.backoff-delay}"),
             exclude = NonRetryableErrorException.class,
             kafkaTemplate = "kafkaAuthCodeCancellationTemplate",
             dltTopicSuffix = "-error",
