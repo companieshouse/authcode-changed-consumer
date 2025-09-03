@@ -26,8 +26,7 @@ import uk.gov.companieshouse.authcode.changed.utils.StaticPropertyUtil;
 
 @Service
 public class KafkaConsumerService {
-
-    private static final double KAFKA_BACKOFF_MULTIPLIER = 2.0;
+    
     private static final Set<StatusEnum> updateableStatuses = Set.of( StatusEnum.CONFIRMED, StatusEnum.AWAITING_APPROVAL, StatusEnum.MIGRATED );
 
     private final AssociationService associationService;
@@ -41,10 +40,7 @@ public class KafkaConsumerService {
             autoCreateTopics = "false",
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             attempts = "${kafka.max-attempts}",
-            backoff = @Backoff(
-                    delayExpression = "${kafka.initial-backoff-delay}",
-                    multiplier = KAFKA_BACKOFF_MULTIPLIER
-            ),
+            backoff = @Backoff(delayExpression = "${kafka.backoff-delay}"),
             exclude = NonRetryableErrorException.class,
             kafkaTemplate = "kafkaAuthCodeCancellationTemplate",
             dltTopicSuffix = "-error",
