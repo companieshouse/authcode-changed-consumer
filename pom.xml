@@ -17,7 +17,7 @@
   <properties>
     <java.version>21</java.version>
     <spring-boot.version>3.5.4</spring-boot.version>
-    <springframework.version>6.2.10</springframework.version>
+    <springframework.version>6.2.11</springframework.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
