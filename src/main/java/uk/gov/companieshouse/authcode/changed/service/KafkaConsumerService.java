@@ -57,31 +57,41 @@ public class KafkaConsumerService {
         final var companyNumber = consumerRecord.value().getCompanyNumber();
         final var xRequestId = String.format( "company_number: %s - Attempt:%d", companyNumber, attemptNumber );
         LOGGER.debugContext( xRequestId, "Received message", null );
-        int pageIndex = 0;
-        int totalPages;
-        int itemsPerPage = StaticPropertyUtil.KAFKA_ASSOCIATION_ITEMS_PER_PAGE > 0 ? StaticPropertyUtil.KAFKA_ASSOCIATION_ITEMS_PER_PAGE : 15;
 
-        do {
-            final var page = associationService.buildFetchAssociationsForCompanyRequest( companyNumber, false, pageIndex, itemsPerPage).get();
+        try {
+            int pageIndex = 0;
+            int totalPages;
+            int itemsPerPage = StaticPropertyUtil.KAFKA_ASSOCIATION_ITEMS_PER_PAGE > 0 ? StaticPropertyUtil.KAFKA_ASSOCIATION_ITEMS_PER_PAGE : 15;
 
-            final var unsentRequests = page.getItems()
-                    .stream()
-                    .filter( association -> updateableStatuses.contains( association.getStatus() ) )
-                    .map(Association::getId)
-                    .map(id -> associationService.buildUpdateStatusRequest( id, RequestBodyPut.StatusEnum.UNAUTHORISED ) )
-                    .toList();
+            do {
+                LOGGER.debugContext( xRequestId, String.format( "Attempting to retrieve associations for company %s", companyNumber ), null );
+                final var page = associationService.buildFetchAssociationsForCompanyRequest( companyNumber, false, pageIndex, itemsPerPage).get();
 
-            final var updatedAssociationIds = Flux.fromIterable( unsentRequests )
-                    .flatMap( request -> Mono.just( request )
-                            .map( Supplier::get ) )
-                    .reduce( ( id1, id2 ) -> id1 + ", " + id2 )
-                    .block(Duration.ofSeconds(20));
-            LOGGER.infoContext( xRequestId, String.format( "Updated association IDs %s", updatedAssociationIds ), null );
+                LOGGER.debugContext( xRequestId, "Preparing PATCH requests", null );
+                final var unsentRequests = page.getItems()
+                        .stream()
+                        .filter( association -> updateableStatuses.contains( association.getStatus() ) )
+                        .map(Association::getId)
+                        .map(id -> associationService.buildUpdateStatusRequest( id, RequestBodyPut.StatusEnum.UNAUTHORISED ) )
+                        .toList();
 
-            acknowledgment.acknowledge();
+                LOGGER.debugContext( xRequestId, "Sending PATCH requests", null );
+                final var updatedAssociationIds = Flux.fromIterable( unsentRequests )
+                        .flatMap( request -> Mono.just( request )
+                                .map( Supplier::get ) )
+                        .reduce( ( id1, id2 ) -> id1 + ", " + id2 )
+                        .block(Duration.ofSeconds(20));
+                LOGGER.infoContext( xRequestId, String.format( "Updated association IDs %s", updatedAssociationIds ), null );
 
-            pageIndex++;
-            totalPages = page.getTotalPages();
-        } while ( pageIndex < totalPages );
+                acknowledgment.acknowledge();
+
+                pageIndex++;
+                totalPages = page.getTotalPages();
+            } while ( pageIndex < totalPages );
+        } catch ( Exception exception ){
+            LOGGER.errorContext( xRequestId, exception, null );
+            throw exception;
+        }
+
     }
 }
