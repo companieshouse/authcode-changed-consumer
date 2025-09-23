@@ -19,8 +19,8 @@ public class AssociationService {
         this.accountsAssociationEndpoint = accountsAssociationEndpoint;
     }
 
-    public Supplier<AssociationsList> buildFetchAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage) {
-        final var request = accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest(companyNumber, includeRemoved, pageIndex, itemsPerPage);
+    public Supplier<AssociationsList> buildFetchAssociationsForCompanyRequest(final String xRequestId, final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage) {
+        final var request = accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest(xRequestId, companyNumber, includeRemoved, pageIndex, itemsPerPage);
         return () -> {
             try {
                 LOGGER.debug(String.format("Sending request to account-association-api: GET /associations/companies/{company_number}. Attempting to fetch Association details for company %s ", companyNumber), null);
@@ -38,8 +38,8 @@ public class AssociationService {
     }
 
 
-    public Supplier<String> buildUpdateStatusRequest(final String associationId, final StatusEnum statusEnum) {
-        final var request = accountsAssociationEndpoint.buildUpdateStatusRequest(associationId, statusEnum);
+    public Supplier<String> buildUpdateStatusRequest(final String xRequestId, final String associationId, final StatusEnum statusEnum) {
+        final var request = accountsAssociationEndpoint.buildUpdateStatusRequest(xRequestId, associationId, statusEnum);
         return () -> {
             try {
                 LOGGER.debug(String.format("Updating status for association ID %s with status %s", associationId, statusEnum), null);

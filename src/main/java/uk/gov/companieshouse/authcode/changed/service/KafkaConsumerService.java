@@ -65,14 +65,14 @@ public class KafkaConsumerService {
 
             do {
                 LOGGER.debugContext( xRequestId, String.format( "Attempting to retrieve associations for company %s", companyNumber ), null );
-                final var page = associationService.buildFetchAssociationsForCompanyRequest( companyNumber, false, pageIndex, itemsPerPage).get();
+                final var page = associationService.buildFetchAssociationsForCompanyRequest( xRequestId, companyNumber, false, pageIndex, itemsPerPage).get();
 
                 LOGGER.debugContext( xRequestId, "Preparing PATCH requests", null );
                 final var unsentRequests = page.getItems()
                         .stream()
                         .filter( association -> updateableStatuses.contains( association.getStatus() ) )
                         .map(Association::getId)
-                        .map(id -> associationService.buildUpdateStatusRequest( id, RequestBodyPut.StatusEnum.UNAUTHORISED ) )
+                        .map(id -> associationService.buildUpdateStatusRequest( xRequestId, id, RequestBodyPut.StatusEnum.UNAUTHORISED ) )
                         .toList();
 
                 LOGGER.debugContext( xRequestId, "Sending PATCH requests", null );

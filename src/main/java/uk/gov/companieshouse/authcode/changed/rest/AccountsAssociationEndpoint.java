@@ -1,37 +1,34 @@
 package uk.gov.companieshouse.authcode.changed.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.function.Supplier;
 import org.springframework.stereotype.Service;
+import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.accounts.associations.model.RequestBodyPut.StatusEnum;
 import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationForCompanyGet;
 import uk.gov.companieshouse.api.handler.accountsassociation.request.PrivateAccountsAssociationUpdateStatusPatch;
-import uk.gov.companieshouse.authcode.changed.service.ApiClientService;
 
 @Service
 public class AccountsAssociationEndpoint {
 
-    @Value("${account.api.url}")
-    private String accountApiUrl;
+    private final Supplier<InternalApiClient> accountApiClientSupplier;
 
-    private final ApiClientService apiClientService;
-
-    @Autowired
-    public AccountsAssociationEndpoint(final ApiClientService apiClientService) {
-        this.apiClientService = apiClientService;
+    public AccountsAssociationEndpoint( final Supplier<InternalApiClient> accountApiClientSupplier ) {
+        this.accountApiClientSupplier = accountApiClientSupplier;
     }
 
-    public PrivateAccountsAssociationForCompanyGet buildGetAssociationsForCompanyRequest(final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage){
+    public PrivateAccountsAssociationForCompanyGet buildGetAssociationsForCompanyRequest( final String xRequestId, final String companyNumber, final boolean includeRemoved, final int pageIndex, final int itemsPerPage ){
         final var url = String.format( "/associations/companies/%s", companyNumber );
-        return apiClientService.getInternalApiClient(accountApiUrl)
-                .privateAccountsAssociationResourceHandler()
-                .getAssociationsForCompany(url, includeRemoved, pageIndex, itemsPerPage);
+        final var client = accountApiClientSupplier.get();
+        client.getHttpClient().setRequestId( xRequestId );
+        return client.privateAccountsAssociationResourceHandler()
+                .getAssociationsForCompany( url, includeRemoved, pageIndex, itemsPerPage );
     }
 
-    public PrivateAccountsAssociationUpdateStatusPatch buildUpdateStatusRequest(final String associationId, final StatusEnum statusEnum){
-        final var updateStatusUrl = String.format("/associations/%s", associationId);
-        return apiClientService.getInternalApiClient(accountApiUrl)
-                .privateAccountsAssociationResourceHandler()
-                .updateAssociationStatusForId(updateStatusUrl, statusEnum);
+    public PrivateAccountsAssociationUpdateStatusPatch buildUpdateStatusRequest( final String xRequestId, final String associationId, final StatusEnum statusEnum ){
+        final var updateStatusUrl = String.format( "/associations/%s", associationId );
+        final var client = accountApiClientSupplier.get();
+        client.getHttpClient().setRequestId( xRequestId );
+        return client.privateAccountsAssociationResourceHandler()
+                .updateAssociationStatusForId( updateStatusUrl, statusEnum );
     }
 }
