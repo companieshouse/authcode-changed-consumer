@@ -44,31 +44,31 @@ public class AssociationServiceTest {
 
     @Test
     void fetchAssociationsForCompanyRequestWithNullInputReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
-        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( null, false, 0, 1 );
+        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "theId123",null, false, 0, 1 );
         Mockito.doThrow( NullPointerException.class ).when( privateAccountsAssociationForCompanyGet ).execute();
-        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest( null, false, 0, 1 ).get());
+        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest( "theId123",null, false, 0, 1 ).get());
     }
 
     @Test
     void fetchAssociationDetailsWithMalformedInputReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
-        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "$$$", false, 0, 1 );
+        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "theId123","$$$", false, 0, 1 );
         Mockito.doThrow( new URIValidationException( "Uri incorrectly formatted" ) ).when( privateAccountsAssociationForCompanyGet ).execute();
-        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest( "$$$", false, 0, 1 ).get());
+        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest( "theId123","$$$", false, 0, 1 ).get());
     }
 
     @Test
     void fetchAssociationDetailsWithNonexistentAssociationReturnsNotFound() throws ApiErrorResponseException, URIValidationException {
         ApiErrorResponseException apiException = new ApiErrorResponseException( new ApiErrorResponseException.Builder( 404, "Not Found", new HttpHeaders() ) );
-        when( accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest("111", false, 0, 1) ).thenReturn(privateAccountsAssociationForCompanyGet);
+        when( accountsAssociationEndpoint.buildGetAssociationsForCompanyRequest("theId123","111", false, 0, 1) ).thenReturn(privateAccountsAssociationForCompanyGet);
         when( privateAccountsAssociationForCompanyGet.execute() ).thenThrow( apiException );
-        Assertions.assertThrows( NotFoundRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest("111", false, 0, 1).get() );
+        Assertions.assertThrows( NotFoundRuntimeException.class, () -> associationService.buildFetchAssociationsForCompanyRequest("theId123","111", false, 0, 1).get() );
     }
 
     @Test
     void fetchAssociationDetailsWithUnexpectedErrorReturnsInternalServerError() throws ApiErrorResponseException, URIValidationException {
-        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "MKUser001", false, 0, 1 );
+        Mockito.doReturn( privateAccountsAssociationForCompanyGet ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "theId123","MKUser001", false, 0, 1 );
         Mockito.doThrow( new ApiErrorResponseException( new Builder( 500, "Something unexpected happened", new HttpHeaders() ) ) ).when( privateAccountsAssociationForCompanyGet ).execute();
-        Supplier<AssociationsList> supplier = associationService.buildFetchAssociationsForCompanyRequest( "MKUser001", false, 0, 1 );
+        Supplier<AssociationsList> supplier = associationService.buildFetchAssociationsForCompanyRequest( "theId123","MKUser001", false, 0, 1 );
         Assertions.assertThrows(InternalServerErrorRuntimeException.class, supplier::get);
     }
 
@@ -79,13 +79,13 @@ public class AssociationServiceTest {
         associationsList.setItems(List.of(association));
 
         PrivateAccountsAssociationForCompanyGet request = Mockito.mock( PrivateAccountsAssociationForCompanyGet.class );
-        Mockito.doReturn( request ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "MICOMP001", false, 0, 1 );
+        Mockito.doReturn( request ).when( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "theId123","MICOMP001", false, 0, 1 );
         Mockito.doReturn(new ApiResponse<>(200, Map.of(), associationsList)).when(request).execute();
 
-        var result = associationService.buildFetchAssociationsForCompanyRequest( "MICOMP001", false, 0, 1 ).get().getItems().getFirst().getCompanyNumber();
+        var result = associationService.buildFetchAssociationsForCompanyRequest( "theId123","MICOMP001", false, 0, 1 ).get().getItems().getFirst().getCompanyNumber();
 
         Assertions.assertEquals( "MICOMP001", result );
-        Mockito.verify( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "MICOMP001", false, 0, 1 );
+        Mockito.verify( accountsAssociationEndpoint ).buildGetAssociationsForCompanyRequest( "theId123", "MICOMP001", false, 0, 1 );
     }
 
     @Test
@@ -94,12 +94,12 @@ public class AssociationServiceTest {
         StatusEnum status = StatusEnum.UNAUTHORISED;
 
         PrivateAccountsAssociationUpdateStatusPatch patchRequest = Mockito.mock(PrivateAccountsAssociationUpdateStatusPatch.class);
-        Mockito.doReturn( patchRequest ).when( accountsAssociationEndpoint ).buildUpdateStatusRequest( association.getId(), status );
+        Mockito.doReturn( patchRequest ).when( accountsAssociationEndpoint ).buildUpdateStatusRequest("theId123", association.getId(), status );
 
-        String result = associationService.buildUpdateStatusRequest(association.getId(), status).get();
+        String result = associationService.buildUpdateStatusRequest("theId123", association.getId(), status).get();
 
         Assertions.assertEquals(association.getId(), result);
-        Mockito.verify(accountsAssociationEndpoint).buildUpdateStatusRequest(association.getId(), status);
+        Mockito.verify(accountsAssociationEndpoint).buildUpdateStatusRequest("theId123", association.getId(), status);
     }
 
     @Test
@@ -110,10 +110,10 @@ public class AssociationServiceTest {
         final ApiErrorResponseException.Builder builder = new ApiErrorResponseException.Builder( 404, "Not Found", new HttpHeaders() );
 
         Mockito.when( mockRequest.execute() ).thenThrow( new ApiErrorResponseException( builder ) );
-        Mockito.when( accountsAssociationEndpoint.buildUpdateStatusRequest( associationId, status ) ).thenReturn( mockRequest );
+        Mockito.when( accountsAssociationEndpoint.buildUpdateStatusRequest( "theId123", associationId, status ) ).thenReturn( mockRequest );
 
-        Assertions.assertThrows(NotFoundRuntimeException.class, () -> associationService.buildUpdateStatusRequest( associationId, status ).get() );
-        Mockito.verify( accountsAssociationEndpoint ).buildUpdateStatusRequest( associationId, status );
+        Assertions.assertThrows(NotFoundRuntimeException.class, () -> associationService.buildUpdateStatusRequest( "theId123", associationId, status ).get() );
+        Mockito.verify( accountsAssociationEndpoint ).buildUpdateStatusRequest( "theId123", associationId, status );
     }
 
     @Test
@@ -121,11 +121,11 @@ public class AssociationServiceTest {
         final String associationId = "MKAssociation001";
         final StatusEnum status = StatusEnum.UNAUTHORISED;
         final PrivateAccountsAssociationUpdateStatusPatch mockPrivateAccountsAssociationUpdateStatusPatch = Mockito.mock(PrivateAccountsAssociationUpdateStatusPatch.class);
-        when( accountsAssociationEndpoint.buildUpdateStatusRequest( associationId, status ) ).thenReturn( mockPrivateAccountsAssociationUpdateStatusPatch );
+        when( accountsAssociationEndpoint.buildUpdateStatusRequest( "theId123", associationId, status ) ).thenReturn( mockPrivateAccountsAssociationUpdateStatusPatch );
         ApiErrorResponseException apiException = new ApiErrorResponseException( new ApiErrorResponseException.Builder( 500, "Error", new HttpHeaders() ) );
 
         Mockito.doThrow( apiException ).when( mockPrivateAccountsAssociationUpdateStatusPatch ).execute();
-        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildUpdateStatusRequest( associationId, status ).get() );
+        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildUpdateStatusRequest( "theId123", associationId, status ).get() );
     }
 
     @Test
@@ -133,10 +133,10 @@ public class AssociationServiceTest {
         final var associationId = "MKAssociation001";
         final var status = StatusEnum.UNAUTHORISED;
         final PrivateAccountsAssociationUpdateStatusPatch mockPrivateAccountsAssociationUpdateStatusPatch = Mockito.mock( PrivateAccountsAssociationUpdateStatusPatch.class );
-        when( accountsAssociationEndpoint.buildUpdateStatusRequest( associationId, status ) ).thenReturn(mockPrivateAccountsAssociationUpdateStatusPatch);
+        when( accountsAssociationEndpoint.buildUpdateStatusRequest( "theId123", associationId, status ) ).thenReturn(mockPrivateAccountsAssociationUpdateStatusPatch);
 
         Mockito.doThrow( new NullPointerException( "Unexpected null" ) ).when( mockPrivateAccountsAssociationUpdateStatusPatch ).execute();
-        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildUpdateStatusRequest( associationId, status ).get());
+        Assertions.assertThrows( InternalServerErrorRuntimeException.class, () -> associationService.buildUpdateStatusRequest( "theId123", associationId, status ).get());
     }
 
 }

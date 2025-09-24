@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.authcode.changed.service;
 
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 
@@ -50,12 +51,12 @@ class KafkaConsumerServiceTest {
         Supplier<AssociationsList> fetchSupplier = () -> page;
         Supplier<String> updateSupplier = () -> "MiAssociation001";
 
-        Mockito.doReturn( fetchSupplier ).when( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP001"), eq(false), eq(0), anyInt());
-        Mockito.doReturn( updateSupplier ).when( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( fetchSupplier ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP001"), eq(false), eq(0), anyInt());
+        Mockito.doReturn( updateSupplier ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation001" ), eq( StatusEnum.UNAUTHORISED ) );
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord1, 1, acknowledgment );
 
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP001"), eq(false), eq(0), anyInt());
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP001"), eq(false), eq(0), anyInt());
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation001" ), eq( StatusEnum.UNAUTHORISED ) );
 
         Mockito.verify(acknowledgment ).acknowledge();
     }
@@ -75,24 +76,24 @@ class KafkaConsumerServiceTest {
         Supplier<String> UpdateSupplier3 = () -> "MiAssociation0044";
         Supplier<String> UpdateSupplier4 = () -> "MiAssociation0045";
 
-        Mockito.doReturn( fetchSupplier1 ).when( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP001"), eq(false), eq(0), anyInt());
-        Mockito.doReturn( fetchSupplier2 ).when( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP001"), eq(false), eq(1), anyInt());
-        Mockito.doReturn( fetchSupplier3 ).when( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP002"), eq(false), eq(0), anyInt());
-        Mockito.doReturn( fetchSupplier4 ).when( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP002"), eq(false), eq(1), anyInt());
-        Mockito.doReturn( UpdateSupplier1 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier2 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation039", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation040", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( fetchSupplier1 ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP001"), eq(false), eq(0), anyInt());
+        Mockito.doReturn( fetchSupplier2 ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP001"), eq(false), eq(1), anyInt());
+        Mockito.doReturn( fetchSupplier3 ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP002"), eq(false), eq(0), anyInt());
+        Mockito.doReturn( fetchSupplier4 ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP002"), eq(false), eq(1), anyInt());
+        Mockito.doReturn( UpdateSupplier1 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation001" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier2 ).when( associationService ).buildUpdateStatusRequest( anyString(), eq( "MiAssociation002" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( anyString(), eq( "MiAssociation039" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( anyString(), eq( "MiAssociation040" ), eq( StatusEnum.UNAUTHORISED ) );
 
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord1, 1, acknowledgment );
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord2, 1, acknowledgment );
 
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP001"), eq(false), eq(0), anyInt());
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP001"), eq(false), eq(1), anyInt());
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP002"), eq(false), eq(0), anyInt());
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( eq("MICOMP002"), eq(false), eq(1), anyInt());
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP001"), eq(false), eq(0), anyInt());
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP001"), eq(false), eq(1), anyInt());
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP002"), eq(false), eq(0), anyInt());
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(), eq("MICOMP002"), eq(false), eq(1), anyInt());
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation001" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation002" ), eq( StatusEnum.UNAUTHORISED ) );
 
         Mockito.verify(acknowledgment, times(4) ).acknowledge();
     }
@@ -110,27 +111,27 @@ class KafkaConsumerServiceTest {
         Supplier<String> UpdateSupplier5 = () -> "MiAssociation005";
         Supplier<String> UpdateSupplier6 = () -> "MiAssociation006";
 
-        Mockito.doReturn( fetchSupplier1 ).when( associationService ).buildFetchAssociationsForCompanyRequest( "MICOMP001", false, 0, 15);
-        Mockito.doReturn( fetchSupplier2 ).when( associationService ).buildFetchAssociationsForCompanyRequest( "MICOMP001", false, 1, 15);
+        Mockito.doReturn( fetchSupplier1 ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(),eq( "MICOMP001" ), eq( false ), eq( 0 ), eq( 15 ) );
+        Mockito.doReturn( fetchSupplier2 ).when( associationService ).buildFetchAssociationsForCompanyRequest( anyString(),eq( "MICOMP001" ), eq( false ), eq( 1 ), eq( 15 ) );
 
-        Mockito.doReturn( UpdateSupplier1 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier2 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation012", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation014", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier5 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation015", StatusEnum.UNAUTHORISED );
-        Mockito.doReturn( UpdateSupplier6 ).when( associationService ).buildUpdateStatusRequest( "MiAssociation016", StatusEnum.UNAUTHORISED );
+        Mockito.doReturn( UpdateSupplier1 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation001" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier2 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation002" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier3 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation012" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier4 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation014" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier5 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation015" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.doReturn( UpdateSupplier6 ).when( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation016" ), eq( StatusEnum.UNAUTHORISED ) );
 
         kafkaConsumerService.consumeAuthCodeCancellationMessage(consumerRecord1, 1, acknowledgment );
 
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( "MICOMP001", false, 0, 15);
-        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( "MICOMP001", false, 1, 15);
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(),eq( "MICOMP001" ), eq( false ), eq( 0 ), eq( 15 ) );
+        Mockito.verify( associationService ).buildFetchAssociationsForCompanyRequest( anyString(),eq( "MICOMP001" ), eq( false ), eq( 1 ), eq( 15 ) );
 
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation001", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation002", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation012", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation014", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation015", StatusEnum.UNAUTHORISED );
-        Mockito.verify( associationService ).buildUpdateStatusRequest( "MiAssociation016", StatusEnum.UNAUTHORISED );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation001" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation002" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation012" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation014" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation015" ), eq( StatusEnum.UNAUTHORISED ) );
+        Mockito.verify( associationService ).buildUpdateStatusRequest( anyString(),eq( "MiAssociation016" ), eq( StatusEnum.UNAUTHORISED ) );
 
         Mockito.verify(acknowledgment, times(2) ).acknowledge();
     }
