@@ -27,7 +27,7 @@ public class ApiClientConfig {
             apiKeyHttpClient.setRequestId( UNKNOWN );
 
             final var internalApiClient = new InternalApiClient( apiKeyHttpClient );
-            internalApiClient.setBasePath( accountApiUrl );
+            internalApiClient.setInternalBasePath( accountApiUrl );
 
             return internalApiClient;
         };
