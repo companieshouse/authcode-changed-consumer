@@ -5,6 +5,7 @@ import static uk.gov.companieshouse.authcode.changed.utils.LoggingUtil.LOGGER;
 import consumer.exception.NonRetryableErrorException;
 import java.time.Duration;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Supplier;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -55,7 +56,7 @@ public class KafkaConsumerService {
             final @Header( name = RetryTopicHeaders.DEFAULT_HEADER_ATTEMPTS, required = false ) Integer attemptNumber,
             final Acknowledgment acknowledgment ){
         final var companyNumber = consumerRecord.value().getCompanyNumber();
-        final var xRequestId = String.format( "company_number: %s - Attempt:%d", companyNumber, attemptNumber );
+        final var xRequestId = UUID.randomUUID().toString().substring( 0, 32 );
         LOGGER.debugContext( xRequestId, "Received message", null );
 
         try {
