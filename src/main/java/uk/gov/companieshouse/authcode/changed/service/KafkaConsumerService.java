@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.DltStrategy;
@@ -15,7 +16,6 @@ import org.springframework.kafka.retrytopic.RetryTopicHeaders;
 import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,7 +41,7 @@ public class KafkaConsumerService {
             autoCreateTopics = "false",
             sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             attempts = "${kafka.max-attempts}",
-            backoff = @Backoff(delayExpression = "${kafka.backoff-delay}"),
+            backOff = @BackOff(delayString = "${kafka.backoff-delay}"),
             exclude = NonRetryableErrorException.class,
             kafkaTemplate = "kafkaAuthCodeCancellationTemplate",
             dltTopicSuffix = "-error",

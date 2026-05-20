@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.authcode.changed.utils;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
