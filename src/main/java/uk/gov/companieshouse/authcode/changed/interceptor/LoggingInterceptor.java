@@ -22,5 +22,4 @@ public class LoggingInterceptor implements HandlerInterceptor, RequestLogger {
     public void postHandle( final HttpServletRequest request, final HttpServletResponse response, final Object handler, final ModelAndView modelAndView ) {
         logEndRequestProcessing( request, response, LOGGER );
     }
-
 }
