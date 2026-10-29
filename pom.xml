@@ -16,6 +16,7 @@
   <description>Kafka consumer for authcode-changed events.</description>
   <properties>
     <java.version>21</java.version>
+    <ch-boms.version>0.1.35</ch-boms.version>
     <spring-boot.version>4.1.2</spring-boot.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
