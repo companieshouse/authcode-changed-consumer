@@ -20,17 +20,17 @@
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
-    <structured-logging.version>4.0.3</structured-logging.version>
-    <rest-service-common-library-version>2.0.14</rest-service-common-library-version>
-    <private-api-sdk-java.version>7.2.19</private-api-sdk-java.version>
-    <api-sdk-manager-java-library.version>3.0.29</api-sdk-manager-java-library.version>
-    <sdk-manager-java.version>4.0.0</sdk-manager-java.version>
-    <api-security-java-version>2.0.28</api-security-java-version>
+    <structured-logging.version>4.0.6</structured-logging.version>
+    <rest-service-common-library-version>2.0.15</rest-service-common-library-version>
+    <private-api-sdk-java.version>7.2.45</private-api-sdk-java.version>
+    <api-sdk-manager-java-library.version>3.0.36</api-sdk-manager-java-library.version>
+    <sdk-manager-java.version>4.0.2</sdk-manager-java.version>
+    <api-security-java-version>2.0.30</api-security-java-version>
     <commons-compress.version>1.28.0</commons-compress.version>
     <commons-lang3.version>3.20.0</commons-lang3.version>
     <google-http-client.version>2.2.0</google-http-client.version>
-    <api-helper-java.version>3.0.4</api-helper-java.version>
-    <kafka-models.version>3.0.39</kafka-models.version>
+    <api-helper-java.version>3.0.5</api-helper-java.version>
+    <kafka-models.version>3.0.40</kafka-models.version>
     <commons-beanutils.version>1.11.0</commons-beanutils.version>
     <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
     <grpc.version>1.83.1</grpc.version>
