@@ -36,7 +36,7 @@
     <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
     <grpc.version>1.83.1</grpc.version>
 
-    <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
+    <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
     <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
     <sonar.projectName>authcode-changed-consumer</sonar.projectName>
     <sonar.projectKey>uk.gov.companieshouse:authcode-changed-consumer</sonar.projectKey>
@@ -58,20 +58,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-web</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -85,28 +71,12 @@
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>structured-logging</artifactId>
       <version>${structured-logging.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>rest-service-common-library</artifactId>
       <version>${rest-service-common-library-version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.tomcat.embed</groupId>
-          <artifactId>tomcat-embed-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.tomcat.embed</groupId>
-          <artifactId>tomcat-embed-websocket</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>uk.gov.companieshouse</groupId>
@@ -117,16 +87,6 @@
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>sdk-manager-java</artifactId>
       <version>${sdk-manager-java.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-collections</groupId>
-          <artifactId>commons-collections</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.nimbusds</groupId>
-          <artifactId>nimbus-jose-jwt</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -142,12 +102,6 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
       <version>${commons-compress.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-lang3</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -158,16 +112,6 @@
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>private-api-sdk-java</artifactId>
       <version>${private-api-sdk-java.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>commons-beanutils</groupId>
-          <artifactId>commons-beanutils</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -202,12 +146,6 @@
       <groupId>uk.gov.companieshouse</groupId>
       <artifactId>api-helper-java</artifactId>
       <version>${api-helper-java.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-lang</groupId>
-          <artifactId>commons-lang</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>uk.gov.companieshouse</groupId>
